@@ -1,0 +1,24 @@
+#*****Build loader v0.1******
+
+from ftplib import FTP
+import os
+
+ftp = FTP('192.168.74.39')				 # FTP server address
+ftp.login('Guest') 		  				 # Connection credentials
+ftp.set_pasv(False) 	     			 # Using Active FTP mode ('true' for passive mode')
+ftp.cwd("/adminaccount/Desktop/1733")    # Test builds directory
+
+
+filenames = []
+ftp.retrlines('NLST', filenames.append)
+print filenames
+
+for filename in filenames:	# download file 
+    local_filename = os.path.join('D:\\test\\', filename)
+    file = open(local_filename, 'wb')
+    ftp.retrbinary('RETR '+ filename, file.write)
+
+    file.close()
+
+
+ftp.quit() 				     # close FTP session
